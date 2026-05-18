@@ -1,0 +1,9 @@
+flowchart LR
+    U[Job Seeker User] --> FE[Frontend React App]
+    R[Recruiter] --> FE
+    FE --> API[FastAPI Backend]
+
+    API --> SQL[(SQLite DB users/profiles/recruiters/jobs/roadmaps/interactions/rewards/decisions)]
+    API --> CH[(ChromaDB RAG Vector Store)]
+    API --> FS[(File Storage uploads/ml_models/rl_model.pkl)]
+    API --> GEM[Gemini API LLM + Embeddings]

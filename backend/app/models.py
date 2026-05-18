@@ -15,6 +15,7 @@ class User(Base):
     
     profile = relationship("UserProfile", back_populates="user", uselist=False)
     roadmaps = relationship("Roadmap", back_populates="user")
+    chat_sessions = relationship("ChatSession", back_populates="user")
 
 
 class UserProfile(Base):
@@ -102,6 +103,9 @@ class Job(Base):
     # Status & Metadata
     status = Column(String, default="active")  # active, closed, draft
     roadmap_json = Column(JSON, nullable=True)  # For AI-generated roadmap
+    jd_analyzed_skills = Column(JSON, nullable=True)  # Model 1: [{skill, importance_label, ...}]
+    jd_analysis_hash = Column(String, nullable=True)  # fingerprint of title+jd_text
+    jd_skills_analyzed_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -132,6 +136,23 @@ class Roadmap(Base):
     user = relationship("User", back_populates="roadmaps")
 
 
+class ChatSession(Base):
+    """One persisted conversation per user + page (e.g. roadmap/3, global chat)."""
+
+    __tablename__ = "chat_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    page_type = Column(String, nullable=False)  # global, roadmap, job, etc.
+    page_id = Column(String, nullable=False, default="")
+    title = Column(String, nullable=True)
+    messages = Column(JSON, default=list)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = relationship("User", back_populates="chat_sessions")
+
+
 class JobInteraction(Base):
     __tablename__ = "job_interactions"
 
@@ -140,7 +161,7 @@ class JobInteraction(Base):
     job_id = Column(Integer, ForeignKey("jobs.id"), nullable=True)
     roadmap_id = Column(Integer, ForeignKey("roadmaps.id"), nullable=True)
     task_id = Column(String)  # ID from the JSON structure
-    action_type = Column(String)  # start, complete, skip, rate_difficulty
+    action_type = Column(String)  # start, complete, skip, skip_regenerate, too_hard, too_easy, rate_difficulty
     difficulty_rating = Column(Integer, nullable=True)  # 1-5
     timestamp = Column(DateTime, default=datetime.utcnow)
     duration_seconds = Column(Integer, nullable=True)
@@ -157,5 +178,29 @@ class RewardLog(Base):
     reward_value = Column(Float)
     model_version = Column(String)
     timestamp = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
+
+class RoadmapBanditDecision(Base):
+    """
+    One row per /phase2/recommend call: selected bandit action + state at decision time.
+    reward_value is set when the user logs feedback (interactions/log) for the same
+    user + roadmap + task (credit assignment). feedback_type mirrors the query param
+    used to build the action mask when present.
+    """
+
+    __tablename__ = "roadmap_bandit_decisions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    job_id = Column(Integer, ForeignKey("jobs.id"), nullable=True)
+    roadmap_id = Column(Integer, ForeignKey("roadmaps.id"), nullable=True)
+    task_id = Column(String, nullable=True)
+    selected_action = Column(String, nullable=False)
+    feedback_type = Column(String, nullable=True)
+    state_vector = Column(JSON, nullable=False)
+    reward_value = Column(Float, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User")

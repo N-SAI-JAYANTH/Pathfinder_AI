@@ -78,11 +78,17 @@ export const aiAPI = {
   matchJobs: () => api.post('/api/ai/match-jobs'),
   skillGapAnalysis: () => api.post('/api/ai/skill-gap-analysis'),
   strengthsWeaknesses: () => api.post('/api/ai/strengths-weaknesses'),
-  chat: (message) => api.post('/api/ai/chat', { message }),
+  chat: (payload) => api.post('/api/ai/chat', payload),
+  getChatSessionByPage: (pageType, pageId = '') =>
+    api.get('/api/ai/chat/sessions/by-page', { params: { page_type: pageType, page_id: pageId } }),
+  getChatSession: (sessionId) => api.get(`/api/ai/chat/sessions/${sessionId}`),
+  listChatSessions: () => api.get('/api/ai/chat/sessions'),
+  clearChatSession: (sessionId) => api.delete(`/api/ai/chat/sessions/${sessionId}`),
 };
 
 export const roadmapAPI = {
   saveRoadmap: (roadmapData) => api.post('/api/roadmaps/save', roadmapData),
+  getRoadmapByJob: (jobId) => api.get(`/api/roadmaps/by-job/${jobId}`),
   getSavedRoadmaps: () => api.get('/api/roadmaps'),
   deleteRoadmap: (roadmapId) => api.delete(`/api/roadmaps/${roadmapId}`),
   regenerateTask: (roadmapId, taskId, feedbackType, rating) => api.post(`/api/roadmaps/${roadmapId}/tasks/${taskId}/regenerate`, { feedback_type: feedbackType, rating }),
@@ -90,7 +96,11 @@ export const roadmapAPI = {
 
 export const phase2API = {
   logInteraction: (data) => api.post('/api/phase2/interactions/log', data),
-  getRecommendation: () => api.get('/api/phase2/recommend'),
+  /** Query params: roadmap_id, task_id, job_id, feedback_type (optional), forced_action (debug only). */
+  getRecommendation: (params = {}) =>
+    api.get('/api/phase2/recommend', { params }),
+  /** Body: { roadmap_id, task_id, decision_id } — decision_id from getRecommendation. */
+  adaptRoadmap: (body) => api.post('/api/phase2/roadmap/adapt', body),
   queryRag: (query) => api.post('/api/phase2/rag/query', null, { params: { query } }),
 };
 

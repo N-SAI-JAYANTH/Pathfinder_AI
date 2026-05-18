@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import List, Optional
+from typing import Any, List, Optional
 from datetime import datetime, date
 
 
@@ -259,8 +259,48 @@ class RoadmapRequest(BaseModel):
     time_commitment: Optional[str] = "part-time"
 
 
+class ChatMessage(BaseModel):
+    role: str  # user | assistant | system
+    content: str
+
+
 class ChatRequest(BaseModel):
     message: str
+    session_id: Optional[int] = None
+    page_type: Optional[str] = "global"
+    page_id: Optional[str] = ""
+    context: Optional[dict] = None
+
+
+class ChatResponse(BaseModel):
+    response: str
+    session_id: int
+    messages: List[ChatMessage]
+
+
+class ChatSessionSummary(BaseModel):
+    id: int
+    page_type: str
+    page_id: str
+    title: Optional[str]
+    message_count: int
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class ChatSessionDetail(BaseModel):
+    id: int
+    page_type: str
+    page_id: str
+    title: Optional[str]
+    messages: List[ChatMessage]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
 
 
 class FeedbackRequest(BaseModel):
@@ -293,7 +333,10 @@ class RoadmapResponse(BaseModel):
 
 class InteractionLogRequest(BaseModel):
     task_id: str
-    action_type: str = Field(..., pattern="^(start|complete|skip|rate_difficulty)$")
+    action_type: str = Field(
+        ...,
+        pattern="^(start|complete|skip|skip_regenerate|too_hard|too_easy|rate_difficulty)$",
+    )
     difficulty_rating: Optional[int] = Field(None, ge=1, le=5)
     job_id: Optional[int] = None
     roadmap_id: Optional[int] = None
@@ -306,6 +349,110 @@ class TaskFeedback(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
+    """Constrained contextual bandit recommendation."""
+
+    selected_action: str
     action: str
     explanation: str
+    reason: str = ""
+    state_vector: dict[str, float] = Field(default_factory=dict)
+    valid_actions: list[str] = Field(default_factory=list)
+    feedback_type: Optional[str] = None
     context_task_id: Optional[str] = None
+    decision_id: Optional[int] = None
+
+
+class RoadmapAdaptRequest(BaseModel):
+    roadmap_id: int
+    task_id: str
+    decision_id: Optional[int] = None
+
+
+class RoadmapAdaptResponse(BaseModel):
+    selected_action: str
+    feedback_type: Optional[str] = None
+    applied: bool
+    message: str
+    explanation: Optional[str] = None
+    updated_roadmap: dict[str, Any]
+    decision_id: Optional[int] = None
+    next_task_id: Optional[str] = None
+
+
+class AnalyzeJDRequest(BaseModel):
+    title: str
+    jd_text: str
+    job_id: Optional[int] = None
+    force_refresh: bool = False
+
+
+class SkillImportancePrediction(BaseModel):
+    skill: str
+    importance_label: str
+    importance_score: Optional[float] = None
+
+
+class AnalyzeJDResponse(BaseModel):
+    extracted_skills: List[SkillImportancePrediction]
+    saved: bool = False
+    job_id: Optional[int] = None
+    analyzed_at: Optional[datetime] = None
+
+
+class MatchUserProfileInput(BaseModel):
+    skills: List[str] = Field(default_factory=list)
+    experience: float = 0.0
+    projects: Optional[str] = ""
+    certifications: Optional[str] = ""
+    education: Optional[str] = ""
+
+
+class MatchJobDescriptionInput(BaseModel):
+    title: str
+    jd_text: str
+    required_experience: Optional[float] = 0.0
+    job_id: Optional[int] = None
+
+
+class MatchUserJobRequest(BaseModel):
+    user_profile: MatchUserProfileInput
+    job_description: MatchJobDescriptionInput
+
+
+class MatchUserJobResponse(BaseModel):
+    similarity_score: float
+    match_score: float
+    matched_skills: List[str]
+    missing_skills: List[str]
+    critical_missing_skills: List[str]
+    matched_counts: dict = Field(default_factory=dict)
+    missing_counts: dict = Field(default_factory=dict)
+    weighted_match_total: float = 0.0
+    weighted_missing_total: float = 0.0
+    skill_match_percentage: float = 0.0
+    experience_score: float = 0.0
+    experience_gap: float = 0.0
+    explanation_features: dict = Field(default_factory=dict)
+    explanation_text: str
+    top_roadmap_skills: List[str] = Field(default_factory=list)
+
+
+class RecommendJobsRequest(BaseModel):
+    user_profile: MatchUserProfileInput
+    top_k: int = Field(default=10, ge=1, le=50)
+
+
+class RecommendedJob(BaseModel):
+    job_id: int
+    job_title: str
+    company_name: Optional[str] = None
+    similarity_score: float
+    match_score: float
+    matched_skills_count: int = 0
+    missing_skills_count: int = 0
+    critical_missing_skills: List[str] = Field(default_factory=list)
+    experience_score: Optional[float] = None
+
+
+class RecommendJobsResponse(BaseModel):
+    results: List[RecommendedJob]

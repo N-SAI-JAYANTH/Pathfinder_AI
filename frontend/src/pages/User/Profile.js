@@ -10,14 +10,6 @@ const Profile = () => {
     cgpa_10th: '',
     cgpa_12th: '',
     total_cgpa: '',
-    cgpa_sem1: '',
-    cgpa_sem2: '',
-    cgpa_sem3: '',
-    cgpa_sem4: '',
-    cgpa_sem5: '',
-    cgpa_sem6: '',
-    cgpa_sem7: '',
-    cgpa_sem8: '',
     skills: [],
     extracted_skills: [],
     certifications: [],
@@ -335,48 +327,6 @@ const Profile = () => {
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-
-            {/* Semester CGPA Section */}
-            <div className="glass-card glass-card-hover p-6">
-              <div className="flex items-center mb-6">
-                <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center mr-3">
-                  <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2V7a2 2 0 012-2h2a2 2 0 002 2v2a2 2 0 002 2h2a2 2 0 012-2V7a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 00-2 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-cyan-300">Semester CGPA (Optional - Fill as many as you have)</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
-                  <div key={sem}>
-                    <label className="block text-sm font-semibold text-cyan-300 mb-2">
-                      Semester {sem}
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        max="10"
-                        name={`cgpa_sem${sem}`}
-                        value={profile[`cgpa_sem${sem}`] || ''}
-                        onChange={handleChange}
-                        className="input-dark block w-full px-4 py-3"
-                        placeholder="e.g., 8.5"
-                        style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' }}
-                      />
-                    ) : (
-                      <div className="input-dark block w-full px-4 py-3 bg-black/40 border border-cyan-500/40 rounded-xl">
-                        <span className="text-cyan-300 text-lg font-semibold">
-                          {profile[`cgpa_sem${sem}`] || 'Not provided'}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                ))}
               </div>
             </div>
 

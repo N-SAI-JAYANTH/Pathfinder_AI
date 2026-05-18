@@ -1,0 +1,26 @@
+flowchart LR
+    subgraph RecruiterFlow["Recruiter Side"]
+      R1[Register/Login] --> R2[Create/Update Job]
+      R2 --> R3[Job stored in SQLite jobs]
+      R3 --> R4[Optional roadmap template generation]
+      R4 --> R5[roadmap_json in jobs]
+    end
+
+    subgraph UserFlow["User Side"]
+      U1[Register/Login] --> U2[Create/Update Profile]
+      U2 --> U3[Upload Resume]
+      U3 --> U4[Gemini extract text + skills]
+      U4 --> U5[Update user_profiles resume_path + extracted_skills]
+      U5 --> U6[Career Recommendation KNN]
+      U5 --> U7[Job Matching Doc2Vec + cosine]
+      U7 --> U8[User selects job]
+      U8 --> U9[Generate personalized roadmap Gemini]
+      U9 --> U10[Save roadmap]
+      U10 --> U11[Task interactions complete/skip/rate]
+      U11 --> U12[RL recommend + roadmap adaptation]
+      U10 --> U13[RAG query over jobs+roadmaps]
+      U13 --> U14[Chat/context answers]
+    end
+
+    R3 -.indexed content.-> C1[(ChromaDB)]
+    U10 -.indexed roadmap.-> C1

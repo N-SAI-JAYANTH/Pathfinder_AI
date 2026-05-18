@@ -1,0 +1,15 @@
+accuracy: 0.9235
+macro_precision: 0.9269
+macro_recall: 0.9278
+macro_f1: 0.9272
+
+              precision    recall  f1-score   support
+
+    high_fit       0.96      0.98      0.97     11436
+     low_fit       0.93      0.94      0.93     26679
+  medium_fit       0.90      0.86      0.88     18208
+
+    accuracy                           0.92     56323
+   macro avg       0.93      0.93      0.93     56323
+weighted avg       0.92      0.92      0.92     56323
+

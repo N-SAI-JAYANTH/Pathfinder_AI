@@ -1,0 +1,16 @@
+feature,importance
+match_ratio,0.30405048
+matched_supporting_sum,0.15321632
+weighted_match_total,0.14272113
+experience_gap,0.068677284
+project_score,0.055659104
+experience_score,0.047692087
+missing_core_sum,0.046579894
+cert_score,0.04118591
+matched_important_sum,0.04023874
+matched_core_sum,0.026889991
+education_score,0.025411068
+missing_supporting_sum,0.014741131
+missing_important_sum,0.013039698
+weighted_missing_total,0.01232377
+profile_job_similarity,0.007573393

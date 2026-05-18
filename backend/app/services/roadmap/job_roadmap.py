@@ -1,29 +1,16 @@
 """
-Job roadmap: generate personalized learning roadmap (Gemini + RL), regenerate task.
-Uses app.config for GEMINI_API_KEY; app.services.rl for adaptation.
+Job roadmap: generate personalized learning roadmap (Gemini), regenerate single task.
 """
 import json
 import re
-import google.generativeai as genai
 
 from app.config import GEMINI_API_KEY
-from app.services.rl import rl_service
-
-if GEMINI_API_KEY:
-    try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        client = genai.GenerativeModel("gemini-2.5-flash")
-        print("Job Roadmap Service: Gemini API initialized successfully")
-    except Exception as e:
-        print(f"Warning: Failed to initialize Gemini in job_roadmap: {e}")
-        client = None
-else:
-    client = None
+from app.services.llm.gemini_client import generate_with_fallback
 
 
 def generate_job_roadmap(job: dict, user_profile: dict) -> dict:
-    if not client:
-        return {"roadmap": None, "error": "Gemini API not configured. Set GEMINI_API_KEY."}
+    if not GEMINI_API_KEY:
+        return {"roadmap": None, "error": "Gemini API not configured. Set GEMINI_API_KEY in backend/.env"}
     target_career = user_profile.get("target_career") or job.get("job_title") or "AI-Integrated Full Stack Engineer"
     job_title = job.get("job_title", "")
     company_name = job.get("company_name", "")
@@ -68,7 +55,7 @@ Return a SINGLE JSON object with this structure:
 Important: description for every task must be a rich paragraph (min 50 words). 4-6 phases, 2-4 tasks each. Return ONLY the JSON.
 """
     try:
-        response = client.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=0.4))
+        response = generate_with_fallback(prompt, temperature=0.4)
         if not response or not response.text:
             return {"roadmap": None, "error": "Empty response from AI."}
         text = response.text.strip().replace("```json", "").replace("```", "").strip()
@@ -76,35 +63,25 @@ Important: description for every task must be a rich paragraph (min 50 words). 4
         if m:
             text = m.group(0)
         roadmap = json.loads(text)
-        try:
-            rl_rec = rl_service.get_recommendation(user_id=user_profile.get("user_id", 0), db=None)
-            roadmap["rl_adaptation"] = {
-                "recommended_action": rl_rec.get("action"),
-                "explanation": rl_rec.get("explanation"),
-                "model_version": "v1_contextual_bandit",
-            }
-        except Exception as e:
-            print(f"Warning: RL integration failed: {e}")
-            roadmap["rl_adaptation"] = {"status": "default", "reason": "RL service unavailable"}
         return {"roadmap": roadmap, "error": None}
     except json.JSONDecodeError as e:
         return {"roadmap": None, "error": f"Failed to parse AI response: {str(e)}"}
     except Exception as e:
         err = str(e)
-        if "API key" in err or "403" in err:
-            return {"roadmap": None, "error": "Gemini API key is invalid or expired."}
+        if "API key" in err or "403" in err or "401" in err:
+            return {"roadmap": None, "error": "Gemini API key is invalid or expired. Check backend/.env"}
         return {"roadmap": None, "error": f"AI roadmap generation failed: {err}"}
 
 
 def regenerate_task(current_task_title: str, feedback_type: str = "skip") -> dict:
-    if not client:
+    if not GEMINI_API_KEY:
         return {"error": "Gemini API not configured"}
     action = "Provide an alternative task." if feedback_type == "skip" else "User found too hard; provide a simpler task."
     prompt = f'''Original Task: "{current_task_title}". User Feedback: {feedback_type}. Context: {action}
 Generate a NEW task as JSON: {{ "task_id": "new_task_...", "title": "...", "jd_alignment": [], "description": "50-100 word paragraph.", "status_options": ["start","already_know","need_easier","skip","finished"], "subtasks": [], "recommended_courses": [], "recommended_projects": [], "skills_gained": [] }}
 Return ONLY the JSON.'''
     try:
-        response = client.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=0.7))
+        response = generate_with_fallback(prompt, temperature=0.7)
         if not response or not response.text:
             return {"error": "Empty response"}
         text = response.text.replace("```json", "").replace("```", "").strip()

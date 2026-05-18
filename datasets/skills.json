@@ -1,0 +1,1454 @@
+{
+  "a/b testing": [
+    "a b testing",
+    "a/b testing"
+  ],
+  "accessibility": [
+    "accessibility"
+  ],
+  "accounts payable": [
+    "accounts payable",
+    "ap"
+  ],
+  "accounts receivable": [
+    "accounts receivable",
+    "ar"
+  ],
+  "adaptability": [
+    "adaptability"
+  ],
+  "agile mindset": [
+    "agile mindset"
+  ],
+  "airflow": [
+    "airflow"
+  ],
+  "alembic": [
+    "alembic"
+  ],
+  "analytical thinking": [
+    "analytical thinking"
+  ],
+  "angular": [
+    "angular"
+  ],
+  "ansible": [
+    "ansible"
+  ],
+  "apache": [
+    "apache"
+  ],
+  "api gateway": [
+    "api gateway"
+  ],
+  "api integration": [
+    "api integration"
+  ],
+  "argocd": [
+    "argocd"
+  ],
+  "asyncio": [
+    "asyncio"
+  ],
+  "attention to detail": [
+    "attention to detail"
+  ],
+  "audit compliance": [
+    "audit compliance",
+    "compliance audit"
+  ],
+  "authentication": [
+    "authentication"
+  ],
+  "automation": [
+    "automation"
+  ],
+  "aws": [
+    "aws"
+  ],
+  "aws administration": [
+    "aws administration"
+  ],
+  "aws architecture": [
+    "aws architecture"
+  ],
+  "aws automation": [
+    "aws automation"
+  ],
+  "aws deployment": [
+    "aws deployment"
+  ],
+  "aws governance": [
+    "aws governance"
+  ],
+  "aws integration": [
+    "aws integration"
+  ],
+  "aws monitoring": [
+    "aws monitoring"
+  ],
+  "aws observability": [
+    "aws observability"
+  ],
+  "aws optimization": [
+    "aws optimization"
+  ],
+  "aws orchestration": [
+    "aws orchestration"
+  ],
+  "aws pipelines": [
+    "aws pipelines"
+  ],
+  "aws scalability": [
+    "aws scalability"
+  ],
+  "aws security": [
+    "aws security"
+  ],
+  "aws testing": [
+    "aws testing"
+  ],
+  "azure": [
+    "azure"
+  ],
+  "azure administration": [
+    "azure administration"
+  ],
+  "azure architecture": [
+    "azure architecture"
+  ],
+  "azure automation": [
+    "azure automation"
+  ],
+  "azure deployment": [
+    "azure deployment"
+  ],
+  "azure devops": [
+    "azure devops"
+  ],
+  "azure functions": [
+    "azure functions"
+  ],
+  "azure governance": [
+    "azure governance"
+  ],
+  "azure integration": [
+    "azure integration"
+  ],
+  "azure monitoring": [
+    "azure monitoring"
+  ],
+  "azure observability": [
+    "azure observability"
+  ],
+  "azure optimization": [
+    "azure optimization"
+  ],
+  "azure orchestration": [
+    "azure orchestration"
+  ],
+  "azure pipelines": [
+    "azure pipelines"
+  ],
+  "azure scalability": [
+    "azure scalability"
+  ],
+  "azure security": [
+    "azure security"
+  ],
+  "azure testing": [
+    "azure testing"
+  ],
+  "babel": [
+    "babel"
+  ],
+  "background screening": [
+    "background screening",
+    "background verification",
+    "bgv"
+  ],
+  "beautifulsoup": [
+    "beautifulsoup"
+  ],
+  "bentoml": [
+    "bentoml"
+  ],
+  "bigquery": [
+    "bigquery"
+  ],
+  "bootstrap": [
+    "bootstrap"
+  ],
+  "boq preparation": [
+    "bill of quantities",
+    "boq",
+    "boq preparation"
+  ],
+  "budget forecasting": [
+    "budget forecasting",
+    "financial forecasting"
+  ],
+  "business analysis": [
+    "business analysis"
+  ],
+  "business operations": [
+    "business operations",
+    "operational management"
+  ],
+  "business storytelling": [
+    "business storytelling"
+  ],
+  "catboost": [
+    "catboost"
+  ],
+  "celery": [
+    "celery"
+  ],
+  "ci/cd": [
+    "ci/cd",
+    "continuous delivery",
+    "continuous integration"
+  ],
+  "civil engineering": [
+    "civil engineering",
+    "civil works"
+  ],
+  "classification": [
+    "classification"
+  ],
+  "cloud run": [
+    "cloud run"
+  ],
+  "cloud security": [
+    "cloud security"
+  ],
+  "cloudformation": [
+    "cloudformation"
+  ],
+  "clustering": [
+    "clustering"
+  ],
+  "collaboration": [
+    "collaboration"
+  ],
+  "communication": [
+    "communication"
+  ],
+  "computer vision": [
+    "computer vision"
+  ],
+  "concurrency": [
+    "concurrency"
+  ],
+  "conflict resolution": [
+    "conflict resolution"
+  ],
+  "construction planning": [
+    "construction planning",
+    "construction scheduling"
+  ],
+  "contingent workforce management": [
+    "contingent workforce management",
+    "contract workforce management"
+  ],
+  "cost analysis": [
+    "cost analysis",
+    "cost analytics"
+  ],
+  "cost optimization": [
+    "cost optimization"
+  ],
+  "creativity": [
+    "creativity"
+  ],
+  "critical thinking": [
+    "critical thinking"
+  ],
+  "cross-functional leadership": [
+    "cross functional leadership",
+    "cross-functional leadership"
+  ],
+  "css": [
+    "css"
+  ],
+  "cuda": [
+    "cuda"
+  ],
+  "cypress": [
+    "cypress"
+  ],
+  "dashboarding": [
+    "dashboarding"
+  ],
+  "data cleaning": [
+    "data cleaning"
+  ],
+  "data marts": [
+    "data marts"
+  ],
+  "data modeling": [
+    "data modeling"
+  ],
+  "data pipelines": [
+    "data pipelines"
+  ],
+  "data versioning": [
+    "data versioning"
+  ],
+  "data visualization": [
+    "data visualization"
+  ],
+  "data warehousing": [
+    "data warehousing"
+  ],
+  "data wrangling": [
+    "data wrangling"
+  ],
+  "dax": [
+    "dax"
+  ],
+  "decision making": [
+    "decision making"
+  ],
+  "deep learning": [
+    "deep learning"
+  ],
+  "delivery operations": [
+    "delivery operations",
+    "service delivery operations"
+  ],
+  "deployment": [
+    "deployment"
+  ],
+  "design patterns": [
+    "design patterns"
+  ],
+  "disaster recovery": [
+    "disaster recovery"
+  ],
+  "distributed training": [
+    "distributed training"
+  ],
+  "django": [
+    "django"
+  ],
+  "dns": [
+    "dns"
+  ],
+  "docker": [
+    "containerization",
+    "docker"
+  ],
+  "docker administration": [
+    "docker administration"
+  ],
+  "docker architecture": [
+    "docker architecture"
+  ],
+  "docker automation": [
+    "docker automation"
+  ],
+  "docker deployment": [
+    "docker deployment"
+  ],
+  "docker governance": [
+    "docker governance"
+  ],
+  "docker integration": [
+    "docker integration"
+  ],
+  "docker monitoring": [
+    "docker monitoring"
+  ],
+  "docker observability": [
+    "docker observability"
+  ],
+  "docker optimization": [
+    "docker optimization"
+  ],
+  "docker orchestration": [
+    "docker orchestration"
+  ],
+  "docker pipelines": [
+    "docker pipelines"
+  ],
+  "docker scalability": [
+    "docker scalability"
+  ],
+  "docker security": [
+    "docker security"
+  ],
+  "docker testing": [
+    "docker testing"
+  ],
+  "documentation": [
+    "documentation"
+  ],
+  "drift detection": [
+    "drift detection"
+  ],
+  "dvc": [
+    "dvc"
+  ],
+  "ec2": [
+    "ec2"
+  ],
+  "ecs": [
+    "ecs"
+  ],
+  "eks": [
+    "eks"
+  ],
+  "elk stack": [
+    "elk stack"
+  ],
+  "etl": [
+    "etl"
+  ],
+  "excel": [
+    "excel"
+  ],
+  "executive reporting": [
+    "executive reporting"
+  ],
+  "experiment tracking": [
+    "experiment tracking"
+  ],
+  "express.js": [
+    "express.js",
+    "expressjs"
+  ],
+  "fastapi": [
+    "fastapi"
+  ],
+  "feast": [
+    "feast"
+  ],
+  "feature engineering": [
+    "feature engineering"
+  ],
+  "feature store": [
+    "feature store"
+  ],
+  "financial reporting": [
+    "finance reporting",
+    "financial reporting"
+  ],
+  "flask": [
+    "flask"
+  ],
+  "full stack development": [
+    "full stack development"
+  ],
+  "gcp": [
+    "gcp"
+  ],
+  "gcp administration": [
+    "gcp administration"
+  ],
+  "gcp architecture": [
+    "gcp architecture"
+  ],
+  "gcp automation": [
+    "gcp automation"
+  ],
+  "gcp deployment": [
+    "gcp deployment"
+  ],
+  "gcp governance": [
+    "gcp governance"
+  ],
+  "gcp integration": [
+    "gcp integration"
+  ],
+  "gcp monitoring": [
+    "gcp monitoring"
+  ],
+  "gcp observability": [
+    "gcp observability"
+  ],
+  "gcp optimization": [
+    "gcp optimization"
+  ],
+  "gcp orchestration": [
+    "gcp orchestration"
+  ],
+  "gcp pipelines": [
+    "gcp pipelines"
+  ],
+  "gcp scalability": [
+    "gcp scalability"
+  ],
+  "gcp security": [
+    "gcp security"
+  ],
+  "gcp testing": [
+    "gcp testing"
+  ],
+  "git": [
+    "git",
+    "version control"
+  ],
+  "github actions": [
+    "github actions"
+  ],
+  "gitlab ci": [
+    "gitlab ci"
+  ],
+  "gke": [
+    "gke"
+  ],
+  "google sheets": [
+    "google sheets"
+  ],
+  "gpu computing": [
+    "gpu computing"
+  ],
+  "gradle": [
+    "gradle"
+  ],
+  "grafana": [
+    "grafana"
+  ],
+  "graphql": [
+    "graphql"
+  ],
+  "grpc": [
+    "grpc"
+  ],
+  "gunicorn": [
+    "gunicorn"
+  ],
+  "helm": [
+    "helm"
+  ],
+  "hibernate": [
+    "hibernate"
+  ],
+  "high availability": [
+    "high availability"
+  ],
+  "hr operations": [
+    "hr operations",
+    "human resources operations"
+  ],
+  "html": [
+    "html"
+  ],
+  "hypothesis testing": [
+    "hypothesis testing"
+  ],
+  "iam": [
+    "iam"
+  ],
+  "incident response": [
+    "incident response"
+  ],
+  "inference optimization": [
+    "inference optimization"
+  ],
+  "infrastructure as code": [
+    "infrastructure as code"
+  ],
+  "integration testing": [
+    "integration testing"
+  ],
+  "inventory control": [
+    "inventory control",
+    "inventory management"
+  ],
+  "iso 27001": [
+    "iso 27001",
+    "iso-27001"
+  ],
+  "iso 9001": [
+    "iso 9001",
+    "iso-9001"
+  ],
+  "j2ee": [
+    "j2ee"
+  ],
+  "java": [
+    "core java",
+    "java"
+  ],
+  "java administration": [
+    "java administration"
+  ],
+  "java architecture": [
+    "java architecture"
+  ],
+  "java automation": [
+    "java automation"
+  ],
+  "java deployment": [
+    "java deployment"
+  ],
+  "java governance": [
+    "java governance"
+  ],
+  "java integration": [
+    "java integration"
+  ],
+  "java monitoring": [
+    "java monitoring"
+  ],
+  "java observability": [
+    "java observability"
+  ],
+  "java optimization": [
+    "java optimization"
+  ],
+  "java orchestration": [
+    "java orchestration"
+  ],
+  "java pipelines": [
+    "java pipelines"
+  ],
+  "java scalability": [
+    "java scalability"
+  ],
+  "java security": [
+    "java security"
+  ],
+  "java testing": [
+    "java testing"
+  ],
+  "javascript": [
+    "javascript",
+    "js"
+  ],
+  "jenkins": [
+    "jenkins"
+  ],
+  "jest": [
+    "jest"
+  ],
+  "jetty": [
+    "jetty"
+  ],
+  "jpa": [
+    "jpa"
+  ],
+  "junit": [
+    "junit"
+  ],
+  "jvm tuning": [
+    "jvm tuning"
+  ],
+  "jwt": [
+    "jwt"
+  ],
+  "kafka": [
+    "kafka"
+  ],
+  "kimball": [
+    "kimball"
+  ],
+  "kpi design": [
+    "kpi design"
+  ],
+  "kubeflow": [
+    "kubeflow"
+  ],
+  "kubernetes": [
+    "k8s",
+    "kubernetes"
+  ],
+  "kubernetes administration": [
+    "kubernetes administration"
+  ],
+  "kubernetes architecture": [
+    "kubernetes architecture"
+  ],
+  "kubernetes automation": [
+    "kubernetes automation"
+  ],
+  "kubernetes deployment": [
+    "kubernetes deployment"
+  ],
+  "kubernetes governance": [
+    "kubernetes governance"
+  ],
+  "kubernetes integration": [
+    "kubernetes integration"
+  ],
+  "kubernetes monitoring": [
+    "kubernetes monitoring"
+  ],
+  "kubernetes observability": [
+    "kubernetes observability"
+  ],
+  "kubernetes optimization": [
+    "kubernetes optimization"
+  ],
+  "kubernetes orchestration": [
+    "kubernetes orchestration"
+  ],
+  "kubernetes pipelines": [
+    "kubernetes pipelines"
+  ],
+  "kubernetes scalability": [
+    "kubernetes scalability"
+  ],
+  "kubernetes security": [
+    "kubernetes security"
+  ],
+  "kubernetes testing": [
+    "kubernetes testing"
+  ],
+  "lambda": [
+    "lambda"
+  ],
+  "lamp": [
+    "lamp"
+  ],
+  "leadership": [
+    "leadership"
+  ],
+  "lightgbm": [
+    "lightgbm"
+  ],
+  "linux": [
+    "linux"
+  ],
+  "logging": [
+    "logging"
+  ],
+  "logistics coordination": [
+    "logistics coordination",
+    "logistics management"
+  ],
+  "looker": [
+    "looker"
+  ],
+  "looker studio": [
+    "looker studio"
+  ],
+  "machine learning": [
+    "machine learning"
+  ],
+  "matplotlib": [
+    "matplotlib"
+  ],
+  "maven": [
+    "maven"
+  ],
+  "mdx": [
+    "mdx"
+  ],
+  "mean": [
+    "mean"
+  ],
+  "medical coding": [
+    "icd coding",
+    "medical coding"
+  ],
+  "mentoring": [
+    "mentoring"
+  ],
+  "mern": [
+    "mern"
+  ],
+  "message queues": [
+    "message queues"
+  ],
+  "microservices": [
+    "microservice architecture",
+    "microservices"
+  ],
+  "mlflow": [
+    "mlflow"
+  ],
+  "mlops": [
+    "mlops"
+  ],
+  "mockito": [
+    "mockito"
+  ],
+  "model deployment": [
+    "model deployment"
+  ],
+  "model evaluation": [
+    "model evaluation"
+  ],
+  "model governance": [
+    "model governance"
+  ],
+  "model monitoring": [
+    "model monitoring"
+  ],
+  "model observability": [
+    "model observability"
+  ],
+  "model registry": [
+    "model registry"
+  ],
+  "model serving": [
+    "model serving"
+  ],
+  "mongodb": [
+    "mongodb"
+  ],
+  "monitoring": [
+    "monitoring"
+  ],
+  "multithreading": [
+    "multithreading"
+  ],
+  "mysql": [
+    "mysql"
+  ],
+  "negotiation": [
+    "negotiation"
+  ],
+  "networking": [
+    "networking"
+  ],
+  "next.js": [
+    "next.js",
+    "nextjs"
+  ],
+  "nginx": [
+    "nginx"
+  ],
+  "nlp": [
+    "nlp"
+  ],
+  "node.js": [
+    "node.js",
+    "nodejs"
+  ],
+  "nosql": [
+    "non relational database",
+    "nosql"
+  ],
+  "numpy": [
+    "numpy"
+  ],
+  "nuxt.js": [
+    "nuxt.js",
+    "nuxtjs"
+  ],
+  "oauth2": [
+    "oauth2"
+  ],
+  "olap": [
+    "olap"
+  ],
+  "onnx": [
+    "onnx"
+  ],
+  "onnx runtime": [
+    "onnx runtime"
+  ],
+  "oracle db": [
+    "oracle db"
+  ],
+  "orm": [
+    "orm"
+  ],
+  "osha compliance": [
+    "osha compliance",
+    "osha standards"
+  ],
+  "ownership": [
+    "ownership"
+  ],
+  "pandas": [
+    "pandas"
+  ],
+  "patient data management": [
+    "clinical data management",
+    "patient data management"
+  ],
+  "pip": [
+    "pip"
+  ],
+  "pl/sql": [
+    "pl sql",
+    "pl/sql"
+  ],
+  "poetry": [
+    "poetry"
+  ],
+  "postgresql": [
+    "postgresql"
+  ],
+  "power bi": [
+    "power bi"
+  ],
+  "power query": [
+    "power query"
+  ],
+  "prefect": [
+    "prefect"
+  ],
+  "presentation skills": [
+    "presentation skills"
+  ],
+  "prisma": [
+    "prisma"
+  ],
+  "problem solving": [
+    "problem solving"
+  ],
+  "process optimization": [
+    "process improvement",
+    "process optimization"
+  ],
+  "procurement planning": [
+    "procurement planning",
+    "purchase planning"
+  ],
+  "project estimation": [
+    "cost estimation",
+    "project estimation"
+  ],
+  "prometheus": [
+    "prometheus"
+  ],
+  "purchase order management": [
+    "po management",
+    "purchase order management"
+  ],
+  "pydantic": [
+    "pydantic"
+  ],
+  "pyspark": [
+    "pyspark"
+  ],
+  "pytest": [
+    "pytest"
+  ],
+  "python": [
+    "py",
+    "python"
+  ],
+  "python administration": [
+    "python administration"
+  ],
+  "python architecture": [
+    "python architecture"
+  ],
+  "python automation": [
+    "python automation"
+  ],
+  "python deployment": [
+    "python deployment"
+  ],
+  "python governance": [
+    "python governance"
+  ],
+  "python integration": [
+    "python integration"
+  ],
+  "python monitoring": [
+    "python monitoring"
+  ],
+  "python observability": [
+    "python observability"
+  ],
+  "python optimization": [
+    "python optimization"
+  ],
+  "python orchestration": [
+    "python orchestration"
+  ],
+  "python pipelines": [
+    "python pipelines"
+  ],
+  "python scalability": [
+    "python scalability"
+  ],
+  "python security": [
+    "python security"
+  ],
+  "python testing": [
+    "python testing"
+  ],
+  "pytorch": [
+    "pytorch"
+  ],
+  "pytorch administration": [
+    "pytorch administration"
+  ],
+  "pytorch architecture": [
+    "pytorch architecture"
+  ],
+  "pytorch automation": [
+    "pytorch automation"
+  ],
+  "pytorch deployment": [
+    "pytorch deployment"
+  ],
+  "pytorch governance": [
+    "pytorch governance"
+  ],
+  "pytorch integration": [
+    "pytorch integration"
+  ],
+  "pytorch monitoring": [
+    "pytorch monitoring"
+  ],
+  "pytorch observability": [
+    "pytorch observability"
+  ],
+  "pytorch optimization": [
+    "pytorch optimization"
+  ],
+  "pytorch orchestration": [
+    "pytorch orchestration"
+  ],
+  "pytorch pipelines": [
+    "pytorch pipelines"
+  ],
+  "pytorch scalability": [
+    "pytorch scalability"
+  ],
+  "pytorch security": [
+    "pytorch security"
+  ],
+  "pytorch testing": [
+    "pytorch testing"
+  ],
+  "qlik": [
+    "qlik"
+  ],
+  "qlik sense": [
+    "qlik sense"
+  ],
+  "quality assurance": [
+    "qa",
+    "quality assurance"
+  ],
+  "quality control": [
+    "qc",
+    "quality control"
+  ],
+  "quantity surveying": [
+    "quantity survey",
+    "quantity surveying"
+  ],
+  "rabbitmq": [
+    "rabbitmq"
+  ],
+  "ray": [
+    "ray"
+  ],
+  "ray serve": [
+    "ray serve"
+  ],
+  "react": [
+    "react"
+  ],
+  "react administration": [
+    "react administration"
+  ],
+  "react architecture": [
+    "react architecture"
+  ],
+  "react automation": [
+    "react automation"
+  ],
+  "react deployment": [
+    "react deployment"
+  ],
+  "react governance": [
+    "react governance"
+  ],
+  "react integration": [
+    "react integration"
+  ],
+  "react monitoring": [
+    "react monitoring"
+  ],
+  "react observability": [
+    "react observability"
+  ],
+  "react optimization": [
+    "react optimization"
+  ],
+  "react orchestration": [
+    "react orchestration"
+  ],
+  "react pipelines": [
+    "react pipelines"
+  ],
+  "react scalability": [
+    "react scalability"
+  ],
+  "react security": [
+    "react security"
+  ],
+  "react testing": [
+    "react testing"
+  ],
+  "redis": [
+    "redis"
+  ],
+  "redshift": [
+    "redshift"
+  ],
+  "redux": [
+    "redux"
+  ],
+  "regression": [
+    "regression"
+  ],
+  "regulatory compliance": [
+    "regulatory compliance",
+    "statutory compliance"
+  ],
+  "reporting": [
+    "reporting"
+  ],
+  "responsive design": [
+    "responsive design"
+  ],
+  "rest api": [
+    "api development",
+    "rest api",
+    "restful api"
+  ],
+  "risk mitigation": [
+    "risk control",
+    "risk mitigation"
+  ],
+  "s3": [
+    "s3"
+  ],
+  "safety compliance": [
+    "ehs compliance",
+    "safety compliance"
+  ],
+  "sass": [
+    "sass"
+  ],
+  "scikit-learn": [
+    "scikit learn",
+    "scikit-learn"
+  ],
+  "scrapy": [
+    "scrapy"
+  ],
+  "scripting": [
+    "scripting"
+  ],
+  "seaborn": [
+    "seaborn"
+  ],
+  "seldon": [
+    "seldon"
+  ],
+  "sequelize": [
+    "sequelize"
+  ],
+  "serverless": [
+    "serverless"
+  ],
+  "session management": [
+    "session management"
+  ],
+  "site supervision": [
+    "site management",
+    "site supervision"
+  ],
+  "sla management": [
+    "service level agreement management",
+    "sla management"
+  ],
+  "snowflake": [
+    "snowflake"
+  ],
+  "soap": [
+    "soap"
+  ],
+  "socket.io": [
+    "socket.io",
+    "socketio"
+  ],
+  "spark": [
+    "spark"
+  ],
+  "spark administration": [
+    "spark administration"
+  ],
+  "spark architecture": [
+    "spark architecture"
+  ],
+  "spark automation": [
+    "spark automation"
+  ],
+  "spark deployment": [
+    "spark deployment"
+  ],
+  "spark governance": [
+    "spark governance"
+  ],
+  "spark integration": [
+    "spark integration"
+  ],
+  "spark monitoring": [
+    "spark monitoring"
+  ],
+  "spark observability": [
+    "spark observability"
+  ],
+  "spark optimization": [
+    "spark optimization"
+  ],
+  "spark orchestration": [
+    "spark orchestration"
+  ],
+  "spark pipelines": [
+    "spark pipelines"
+  ],
+  "spark scalability": [
+    "spark scalability"
+  ],
+  "spark security": [
+    "spark security"
+  ],
+  "spark testing": [
+    "spark testing"
+  ],
+  "splunk": [
+    "splunk"
+  ],
+  "spring": [
+    "spring"
+  ],
+  "spring boot": [
+    "spring boot"
+  ],
+  "spring mvc": [
+    "spring mvc"
+  ],
+  "spring security": [
+    "spring security"
+  ],
+  "sql": [
+    "sql",
+    "structured query language"
+  ],
+  "sql administration": [
+    "sql administration"
+  ],
+  "sql architecture": [
+    "sql architecture"
+  ],
+  "sql automation": [
+    "sql automation"
+  ],
+  "sql deployment": [
+    "sql deployment"
+  ],
+  "sql governance": [
+    "sql governance"
+  ],
+  "sql integration": [
+    "sql integration"
+  ],
+  "sql monitoring": [
+    "sql monitoring"
+  ],
+  "sql observability": [
+    "sql observability"
+  ],
+  "sql optimization": [
+    "sql optimization"
+  ],
+  "sql orchestration": [
+    "sql orchestration"
+  ],
+  "sql pipelines": [
+    "sql pipelines"
+  ],
+  "sql scalability": [
+    "sql scalability"
+  ],
+  "sql security": [
+    "sql security"
+  ],
+  "sql testing": [
+    "sql testing"
+  ],
+  "sqlalchemy": [
+    "sqlalchemy"
+  ],
+  "sre": [
+    "sre"
+  ],
+  "ssas": [
+    "ssas"
+  ],
+  "ssis": [
+    "ssis"
+  ],
+  "ssrs": [
+    "ssrs"
+  ],
+  "staff augmentation": [
+    "it staffing",
+    "resource augmentation",
+    "staff augmentation"
+  ],
+  "stakeholder alignment": [
+    "stakeholder alignment",
+    "stakeholder coordination"
+  ],
+  "stakeholder management": [
+    "stakeholder management"
+  ],
+  "star schema": [
+    "star schema"
+  ],
+  "statistics": [
+    "statistics"
+  ],
+  "structural analysis": [
+    "structural analysis",
+    "structure analysis"
+  ],
+  "supply chain management": [
+    "scm",
+    "supply chain management"
+  ],
+  "system design": [
+    "system design"
+  ],
+  "tableau": [
+    "tableau"
+  ],
+  "tailwind css": [
+    "tailwind css"
+  ],
+  "talent deployment": [
+    "consultant deployment",
+    "resource deployment",
+    "talent deployment"
+  ],
+  "teamwork": [
+    "teamwork"
+  ],
+  "tensorflow": [
+    "tensorflow"
+  ],
+  "tensorflow administration": [
+    "tensorflow administration"
+  ],
+  "tensorflow architecture": [
+    "tensorflow architecture"
+  ],
+  "tensorflow automation": [
+    "tensorflow automation"
+  ],
+  "tensorflow deployment": [
+    "tensorflow deployment"
+  ],
+  "tensorflow governance": [
+    "tensorflow governance"
+  ],
+  "tensorflow integration": [
+    "tensorflow integration"
+  ],
+  "tensorflow monitoring": [
+    "tensorflow monitoring"
+  ],
+  "tensorflow observability": [
+    "tensorflow observability"
+  ],
+  "tensorflow optimization": [
+    "tensorflow optimization"
+  ],
+  "tensorflow orchestration": [
+    "tensorflow orchestration"
+  ],
+  "tensorflow pipelines": [
+    "tensorflow pipelines"
+  ],
+  "tensorflow scalability": [
+    "tensorflow scalability"
+  ],
+  "tensorflow security": [
+    "tensorflow security"
+  ],
+  "tensorflow testing": [
+    "tensorflow testing"
+  ],
+  "terraform": [
+    "terraform"
+  ],
+  "time management": [
+    "time management"
+  ],
+  "time series": [
+    "time series"
+  ],
+  "tomcat": [
+    "tomcat"
+  ],
+  "triton inference server": [
+    "triton inference server"
+  ],
+  "typescript": [
+    "ts",
+    "typescript"
+  ],
+  "ui design": [
+    "ui design"
+  ],
+  "unit testing": [
+    "unit testing"
+  ],
+  "uvicorn": [
+    "uvicorn"
+  ],
+  "variance analysis": [
+    "budget variance analysis",
+    "variance analysis"
+  ],
+  "vendor evaluation": [
+    "supplier evaluation",
+    "vendor evaluation"
+  ],
+  "vendor protocol compliance": [
+    "vendor compliance",
+    "vendor protocol compliance"
+  ],
+  "visa management": [
+    "immigration documentation",
+    "visa management"
+  ],
+  "vite": [
+    "vite"
+  ],
+  "vpc": [
+    "vpc"
+  ],
+  "vue.js": [
+    "vue.js",
+    "vuejs"
+  ],
+  "web performance": [
+    "web performance"
+  ],
+  "webpack": [
+    "webpack"
+  ],
+  "websockets": [
+    "websockets"
+  ],
+  "workforce strategy": [
+    "talent strategy",
+    "workforce planning",
+    "workforce strategy"
+  ],
+  "xgboost": [
+    "xgboost"
+  ],
+  "xml": [
+    "xml"
+  ]
+}

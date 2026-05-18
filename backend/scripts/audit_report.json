@@ -1,0 +1,412 @@
+{
+  "phase1_missing_files": [],
+  "phase2_data_quality": {
+    "jobs_csv": {
+      "rows": 1005,
+      "dup_by_title_jd": 0,
+      "empty_jd": 0,
+      "short_jd_lt_200": 0,
+      "avg_jd_len": 3414.95,
+      "required_experience_null_pct": 33.33,
+      "role_distribution": {
+        "Full Stack Developer": 300,
+        "Data Analyst": 300,
+        "Java Developer": 196,
+        "Backend Developer": 53,
+        "Frontend Developer": 47,
+        "DevOps Engineer": 35,
+        "Data Scientist": 27,
+        "Python Developer": 22,
+        "Cloud Engineer": 10,
+        "BI Analyst": 10,
+        "ML Engineer": 5
+      }
+    },
+    "jobs_balanced_csv": {
+      "rows": 55,
+      "dup_by_title_jd": 0,
+      "empty_jd": 0,
+      "short_jd_lt_200": 0,
+      "avg_jd_len": 3544.96,
+      "required_experience_null_pct": 23.64,
+      "role_distribution": {
+        "BI Analyst": 5,
+        "Backend Developer": 5,
+        "Cloud Engineer": 5,
+        "Data Analyst": 5,
+        "Data Scientist": 5,
+        "DevOps Engineer": 5,
+        "Frontend Developer": 5,
+        "Full Stack Developer": 5,
+        "Java Developer": 5,
+        "ML Engineer": 5,
+        "Python Developer": 5
+      }
+    },
+    "users_csv": {
+      "rows": 480,
+      "bad_experience_rows": 0,
+      "empty_skills": 0,
+      "role_distribution": {
+        "Data Analyst": 40,
+        "Data Scientist": 40,
+        "ML Engineer": 40,
+        "Backend Developer": 40,
+        "Frontend Developer": 40,
+        "Full Stack Developer": 40,
+        "Java Developer": 40,
+        "Python Developer": 40,
+        "DevOps Engineer": 40,
+        "Cloud Engineer": 40,
+        "BI Analyst": 40,
+        "MLOps Engineer": 40
+      }
+    },
+    "skills_json": {
+      "canonical_count": 416,
+      "non_list_values": 0,
+      "synonym_dup_count": 0,
+      "total_synonyms": 439
+    },
+    "skill_importance_dataset": {
+      "rows": 4959,
+      "missing_cols": [],
+      "numeric": {
+        "context_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "section_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "title_similarity": {
+          "nan": 0,
+          "min": -0.0589,
+          "max": 0.8013
+        },
+        "semantic_similarity": {
+          "nan": 0,
+          "min": -0.0792,
+          "max": 0.5959
+        },
+        "frequency_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        }
+      },
+      "class_distribution": {}
+    },
+    "skill_importance_labeled": {
+      "rows": 4959,
+      "missing_cols": [],
+      "numeric": {
+        "context_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "section_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "title_similarity": {
+          "nan": 0,
+          "min": -0.0589,
+          "max": 0.8013
+        },
+        "semantic_similarity": {
+          "nan": 0,
+          "min": -0.0792,
+          "max": 0.5959
+        },
+        "frequency_score": {
+          "nan": 0,
+          "min": 0.0,
+          "max": 1.0
+        }
+      },
+      "class_distribution": {
+        "supporting": 2411,
+        "optional": 1778,
+        "important": 580,
+        "core": 190
+      }
+    },
+    "user_job_fit_dataset": {
+      "rows": 482400,
+      "dup_user_job": 0,
+      "class_distribution": {},
+      "ranges": {
+        "match_ratio": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "experience_score": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "profile_job_similarity": {
+          "min": 0.0,
+          "max": 0.2696
+        }
+      }
+    },
+    "user_job_fit_labeled": {
+      "rows": 482400,
+      "dup_user_job": 0,
+      "class_distribution": {
+        "low_fit": 249328,
+        "medium_fit": 131835,
+        "high_fit": 101237
+      },
+      "ranges": {
+        "match_ratio": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "experience_score": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "profile_job_similarity": {
+          "min": 0.0,
+          "max": 0.2696
+        }
+      }
+    },
+    "user_job_fit_balanced": {
+      "rows": 442836,
+      "dup_user_job": 0,
+      "class_distribution": {
+        "low_fit": 209764,
+        "medium_fit": 131835,
+        "high_fit": 101237
+      },
+      "ranges": {
+        "match_ratio": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "experience_score": {
+          "min": 0.0,
+          "max": 1.0
+        },
+        "profile_job_similarity": {
+          "min": 0.0,
+          "max": 0.2696
+        }
+      }
+    }
+  },
+  "phase3_model1_sanity": {
+    "tests": [
+      {
+        "title": "Backend Developer",
+        "preds": [
+          {
+            "skill": "docker",
+            "importance_label": "supporting",
+            "importance_score": 0.9979,
+            "features": {
+              "context_score": 0.2,
+              "section_score": 0.4,
+              "title_similarity": 0.2003,
+              "semantic_similarity": 0.4131,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "java",
+            "importance_label": "important",
+            "importance_score": 0.9955,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.2991,
+              "semantic_similarity": 0.2287,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "microservices",
+            "importance_label": "important",
+            "importance_score": 0.9808,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.2126,
+              "semantic_similarity": 0.4841,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "spring",
+            "importance_label": "important",
+            "importance_score": 0.9579,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.071,
+              "semantic_similarity": 0.0941,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "spring boot",
+            "importance_label": "important",
+            "importance_score": 0.9827,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.0956,
+              "semantic_similarity": 0.1876,
+              "frequency_score": 0.25
+            }
+          }
+        ]
+      },
+      {
+        "title": "Data Analyst",
+        "preds": [
+          {
+            "skill": "excel",
+            "importance_label": "important",
+            "importance_score": 0.7152,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.5081,
+              "semantic_similarity": 0.4896,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "python",
+            "importance_label": "supporting",
+            "importance_score": 0.9969,
+            "features": {
+              "context_score": 0.3,
+              "section_score": 0.4,
+              "title_similarity": 0.3507,
+              "semantic_similarity": 0.4202,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "sql",
+            "importance_label": "important",
+            "importance_score": 0.9799,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.4268,
+              "semantic_similarity": 0.4354,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "statistics",
+            "importance_label": "important",
+            "importance_score": 0.9729,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.4064,
+              "semantic_similarity": 0.4392,
+              "frequency_score": 0.25
+            }
+          },
+          {
+            "skill": "tableau",
+            "importance_label": "important",
+            "importance_score": 0.9948,
+            "features": {
+              "context_score": 1.0,
+              "section_score": 0.4,
+              "title_similarity": 0.3167,
+              "semantic_similarity": 0.3652,
+              "frequency_score": 0.25
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "phase4_model2_sanity": {
+    "case_a": {
+      "fit_label": "high_fit",
+      "fit_score": 1.0,
+      "matched_skills": [
+        "java",
+        "spring boot"
+      ],
+      "missing_skills": [
+        "docker",
+        "microservices",
+        "spring"
+      ],
+      "critical_missing_skills": [
+        "spring"
+      ],
+      "explanation_features": {
+        "matched_core_sum": 0,
+        "matched_important_sum": 2,
+        "matched_supporting_sum": 0,
+        "missing_core_sum": 0,
+        "missing_important_sum": 1,
+        "missing_supporting_sum": 2,
+        "weighted_match_total": 4.0,
+        "weighted_missing_total": 4.0,
+        "match_ratio": 0.4,
+        "experience_gap": 0.5,
+        "experience_score": 0.9167,
+        "project_score": 0.3333,
+        "cert_score": 0.0,
+        "education_score": 0.3,
+        "profile_job_similarity": 0.4003
+      }
+    },
+    "case_b": {
+      "fit_label": "low_fit",
+      "fit_score": 0.9999,
+      "matched_skills": [],
+      "missing_skills": [
+        "kubernetes",
+        "machine learning",
+        "mlops",
+        "python",
+        "tensorflow"
+      ],
+      "critical_missing_skills": [
+        "kubernetes",
+        "machine learning",
+        "mlops",
+        "python",
+        "tensorflow"
+      ],
+      "explanation_features": {
+        "matched_core_sum": 0,
+        "matched_important_sum": 0,
+        "matched_supporting_sum": 0,
+        "missing_core_sum": 0,
+        "missing_important_sum": 5,
+        "missing_supporting_sum": 0,
+        "weighted_match_total": 0.0,
+        "weighted_missing_total": 10.0,
+        "match_ratio": 0.0,
+        "experience_gap": 2.0,
+        "experience_score": 0.6667,
+        "project_score": 0.0,
+        "cert_score": 0.0,
+        "education_score": 0.2,
+        "profile_job_similarity": 0.0
+      }
+    }
+  },
+  "generated_at": 1777614721.531721
+}

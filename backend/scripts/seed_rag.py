@@ -43,7 +43,7 @@ def create_dummy_data(db: Session):
         db.add(recruiter)
         db.commit()
         
-    # Create Dummy Jobs
+    # Create  Jobs
     jobs_data = [
         {
             "job_title": "Senior Software Engineer",
@@ -122,7 +122,9 @@ def seed_rag_db():
                 text=job_text,
                 metadata=metadata
             )
-            print(f"Indexed Job: {job.job_title}")
+            # Count chunks for this job
+            chunks = rag_service.chunk_text(job_text)
+            print(f"Indexed Job: {job.job_title} ({len(chunks)} chunk{'s' if len(chunks) > 1 else ''})")
             
         # 3. Index Roadmaps (if any)
         roadmaps = db.query(Roadmap).all()
@@ -161,7 +163,9 @@ def seed_rag_db():
                 text=roadmap_text,
                 metadata=metadata
             )
-            print(f"Indexed Roadmap: {roadmap.id}")
+            # Count chunks for this roadmap
+            chunks = rag_service.chunk_text(roadmap_text)
+            print(f"Indexed Roadmap: {roadmap.id} ({len(chunks)} chunk{'s' if len(chunks) > 1 else ''})")
             
         print("RAG Seeding Completed Successfully!")
         

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { jobAPI } from '../../services/api';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
@@ -181,12 +181,12 @@ const JobComparison = () => {
                 <td className="border border-cyan-500/30 p-4 bg-black/40 font-semibold" style={{ color: 'cyan' }}>Actions</td>
                 {jobs.map((job) => (
                   <td key={job.id} className="border border-cyan-500/30 p-4 bg-black/40 text-center">
-                    <button
-                      onClick={() => navigate(`/job/${job.id}`)}
-                      className="px-4 py-2 bg-cyan-500 text-black rounded-full hover:bg-cyan-400 font-semibold"
+                    <Link
+                      to={`/jobs/${job.id}`}
+                      className="inline-block px-4 py-2 bg-cyan-500 text-black rounded-full hover:bg-cyan-400 font-semibold"
                     >
                       View Details
-                    </button>
+                    </Link>
                   </td>
                 ))}
               </tr>

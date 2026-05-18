@@ -7,6 +7,7 @@ from app.services.llm.gemini import (
     analyze_skill_gap,
     analyze_strengths_weaknesses,
     chat_with_context,
+    chat_with_rag_and_history,
 )
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     "analyze_skill_gap",
     "analyze_strengths_weaknesses",
     "chat_with_context",
+    "chat_with_rag_and_history",
 ]

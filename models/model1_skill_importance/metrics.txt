@@ -1,0 +1,16 @@
+accuracy: 0.9860
+macro_precision: 0.9782
+macro_recall: 0.9683
+macro_f1: 0.9732
+
+              precision    recall  f1-score   support
+
+        core       0.98      0.95      0.97        44
+   important       0.96      0.94      0.95       143
+    optional       1.00      0.99      0.99       766
+  supporting       0.98      0.99      0.99       904
+
+    accuracy                           0.99      1857
+   macro avg       0.98      0.97      0.97      1857
+weighted avg       0.99      0.99      0.99      1857
+

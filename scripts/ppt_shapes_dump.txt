@@ -1,0 +1,217 @@
+--- 1
+3|PathFinder AI – Simplified
+ AI‐Powered Academic & Career Assistant
+4|Aditya Kaashyap Emani  AM.EN.U4CSE22007
+Nirujogi Sai Jayanth        AM.EN.U4CSE22037
+Intha Madhav Reddy       AM.EN.U4CSE22069
+
+5|Guided by Bri. Krishnaprasad TR
+Group number : A13
+
+--- 2
+0|Introduction
+Problem & Objective
+Proposed Solution Overview 
+System Architecture / Design
+Implementation Details
+Results & Performance
+Evaluation & Analysis
+Challenges & Solutions
+Conclusion
+Future Scope
+Publication Status
+1|Outline
+2|2
+3|Project title
+--- 3
+0|Introduction 
+1|3
+2|Career platforms often give generic advice without clear job-fit reasoning.
+PathFinder AI is a full-stack web platform (React + FastAPI + SQLite) for students and job seekers.
+Two roles: job seeker and recruiter.
+The system: KNN career suggestions; job ranking (Doc2Vec + importance-weighted similarity); Gemini roadmaps with gap analysis; contextual bandit adapts saved roadmaps from task feedback.
+Stack: React, FastAPI, SQLite, ChromaDB (optional RAG), XGBoost, gensim Doc2Vec, Google Gemini.
+--- 4
+0|Problem statement:
+• Keyword-only matching lacks explainability and structured learning paths.
+• User skills are not mapped clearly to real JD requirements.
+• Roadmaps are static and do not adapt when tasks are too hard or irrelevant.
+• Recruiters and seekers need one platform for jobs, matching, and guidance.
+
+Objectives:
+• Build JWT-authenticated user and recruiter workflows.
+• Resume upload with Gemini + lexicon-based skill extraction.
+• KNN career recommendations; Doc2Vec + Model 2 weighted job ranking.
+• Model 1: classify JD skills as core / important / supporting / optional (saved per job).
+• Gemini JSON roadmaps; Phase 2 contextual bandit (7 actions) on task feedback.
+1|Problem & Objective 
+2|4
+--- 5
+0|Pipeline (as implemented):
+• Skills: datasets/skills.json lexicon + competency extractor; resume via Gemini (local fallback on quota).
+• Model 1 (XGBoost): JD skill importance — stored once per job until JD changes.
+• Model 2: similarity score (0–100) from weighted matched/missing skills + experience (no high/medium/low labels).
+• Doc2Vec baseline: semantic match + 70/30 skill overlap (fallback matcher).
+• Gemini: structured roadmaps (role summary, gap analysis, phased tasks).
+• Contextual bandit (ε=0.15, 10-D state, 7 roadmap actions) — adapts learning plans, not job lists.
+1|Proposed Solution Overview 
+2|5
+--- 6
+0|Key ideas:
+• Three job-matching layers: Doc2Vec (semantic), Model 1 (JD parsing), Model 2 (weighted user–job similarity).
+• Gemini + optional ChromaDB RAG for chat and context-aware guidance.
+• Contextual bandit (not full MDP RL) edits roadmaps after Complete / Too Hard / Too Easy / Skip & Regenerate.
+
+Workflow:
+1. Register → profile + optional resume.
+2. KNN career recommendations; search/browse jobs; AI job matching.
+3. Generate roadmap for a job → saved per job (persists on refresh).
+4. Task feedback → log → recommend → adapt (Phase 2 APIs).
+5. Recruiter posts jobs with JD, skills, salary, remote options.
+1|Proposed Solution Overview 
+2|6
+--- 7
+0|System Architecture / Design 
+1|7
+--- 8
+0|Layers
+• Presentation: React SPA (port 3000)
+• API: FastAPI (port 8001) — auth, jobs, profiles, roadmaps, AI, Phase 2, match routes
+• Database: SQLite (pathfinder.db)
+• ML/AI: KNN + Doc2Vec; Model 1 & Model 2; rl_model.pkl (bandit); Gemini with model fallbacks
+• Optional: ChromaDB RAG (seed: scripts/seed_rag.py)
+
+Data
+• datasets/skills.json, training CSVs, models/*.pkl, backend/ml_models/
+1|System Architecture / Design 
+2|8
+--- 9
+0|System Workflow
+1|9
+--- 10
+0|Implementation Details 
+1|10
+2|Technologies:
+• Frontend: React, React Router, Axios
+• Backend: FastAPI, SQLAlchemy, Alembic, uvicorn (8001)
+• Database: SQLite
+
+AI/ML:
+• Careers: KNN + MultiLabelBinarizer
+• Model 1: XGBoost + MiniLM features (skill importance)
+• Model 2: weighted similarity scoring (Model 1 output + user skills + experience)
+• Jobs UI/fallback: gensim Doc2Vec + cosine hybrid
+• Roadmaps: Gemini | Adaptation: contextual bandit (7 actions, ε=0.15)
+• RAG: ChromaDB; chat with per-page sessions
+--- 11
+0|Implementation Details 
+1|11
+2|Key features:
+• User/recruiter JWT auth; profile + resume upload
+• KNN careers; job search/filter; job compare; job detail with roadmaps
+• Model 1: POST /analyze-jd — importance-weighted skills (cached per job)
+• Model 2: similarity ranking — matched/missing/critical skills
+• Gemini roadmaps; Phase 2 log / recommend / adapt
+• AI chat with RAG + conversation history
+• Recruiter enhanced job CRUD
+--- 12
+0|Datasets & setup:
+• 799 job postings; 12,375 (job, skill) rows; 460-skill lexicon
+
+Model 1 — XGBoost skill importance (test n=1,857):
+• Accuracy 98.60% | macro-F1 97.32% (P 97.82%, R 96.83%)
+• Per-class F1: core 0.97 | important 0.95 | supporting 0.99 | optional 0.99
+• Top features: context_score 41%, section_score 37%
+
+Model 2 — similarity matching (user vs job, not fit classes):
+• similarity_score 0-100 from weighted matched vs missing skills (Model 1 tiers)
+• Weights: core 3.0 | important 2.0 | supporting 1.0 | optional 0.5
+• Blend: 72% skills | 20% experience | 8% profile-JD lexical; core-miss penalty
+• Outputs: ranked jobs, matched/missing/critical skills — no high/medium/low labels
+
+Also: Doc2Vec semantic baseline; roadmap bandit (epsilon=0.15, 7 actions, 10-D state)
+1|Results & Performance 
+2|12
+--- 13
+0|Live demo flow (React :3000 + FastAPI :8001):
+1. Register -> upload resume -> profile skills (Gemini + lexicon fallback)
+2. Career recommendations (KNN on resume embedding)
+3. Search Jobs -> filter SQLite board; open job detail
+4. Job Matching -> ranked list with similarity %, matched & missing skills
+   (Model 2 primary; Doc2Vec fallback if profile sparse)
+5. Generate roadmap -> JSON phases saved per job (refresh-safe upsert)
+6. Roadmap feedback: Complete / Too Hard / Too Easy / Skip
+   -> log -> recommend -> adapt (bandit action + Gemini task rewrite)
+7. Compare up to 3 jobs side-by-side; recruiter posts JD -> Model 1 skills cached
+
+Explainability shown to user: skill tiers, similarity %, gap analysis, adaptation reason
+1|Results & Performance 
+2|13
+--- 14
+0|Objectives achieved:
+• Full-stack platform with dual roles and JWT security
+• Resume + Gemini skill extraction (lexicon fallback)
+• KNN careers; three-layer job matching; saved roadmaps per job
+• Phase 2 contextual bandit on roadmap task interactions
+• Recruiter job board and searchable listings
+
+Evaluation:
+• Model 1: 98.6% test accuracy on JD skill tiers; persisted per job until JD changes
+• Model 2: weighted similarity matching (0-100) with matched/missing skill lists
+• Bandit: sample-efficient roadmap edits (not deep RL, not job re-ranking)
+1|Evaluation & Analysis  
+2|14
+--- 15
+0|Comparison:
+• vs keyword portals: skill-weighted fit + roadmaps + adaptation
+• vs cosine-only: Doc2Vec + importance-aware Model 1/2
+• vs static roadmaps: constrained contextual bandit (7 actions, masking rules)
+
+Strengths: modular FastAPI; reproducible training; Swagger APIs; dual roles
+
+Limitations:
+• Gemini needs API quota/billing
+• Bandit adapts roadmaps only, not job re-ranking
+• No external job-feed APIs yet; local SQLite jobs
+1|Evaluation & Analysis  
+2|15
+--- 16
+0|Challenges:
+• Noisy resumes and heterogeneous JDs
+• Gemini rate limits (429) on free tier
+• Integrating KNN, Doc2Vec, XGBoost, Gemini, bandit, RAG
+• Valid roadmap JSON after adaptive edits
+
+Solutions:
+• skills.json lexicon + Model 1 feature pipeline; persist JD analysis per job
+• Gemini model fallbacks + local resume skill extraction
+• Modular services; Phase 2 APIs; action masking for high JD-importance tasks
+• DB migration helpers; e2e test scripts
+1|Challenges & Solutions  
+2|16
+--- 17
+0|PathFinder AI delivers integrated career guidance:
+• Profile/resume → careers (KNN) → jobs (weighted similarity + search)
+• Gemini learning roadmaps with gap analysis
+• Contextual bandit adapts roadmaps from learner feedback
+• Explainable outputs: similarity %, matched/missing skills, adaptation reasons
+• Academic demo ready; extensible to cloud, external job APIs, and production RAG
+1|Conclusion  
+2|17
+--- 18
+0|Future work:
+• External job portal APIs; cloud deployment
+• Production RAG indexing pipeline; multilingual support
+• Mock interviews and resume scoring (out of current scope)
+• Larger datasets; library version pinning for ML artifacts
+• Optional deep RL only if long-horizon simulation is added — bandit is intentional v1
+1|Future Scope 
+2|18
+--- 19
+0|Conference: 2nd IEEE International Conference on Information, Implementation and Innovation in Technology (I2ITCON 2026)
+Publisher : IEEE
+Date of conference : 10th April 2026
+Accept Status : Not yet confirmed
+
+1|Publication status 
+2|19

@@ -1,0 +1,13 @@
+erDiagram
+    USERS ||--|| USER_PROFILES : has
+    USERS ||--o{ ROADMAPS : owns
+    RECRUITERS ||--o{ JOBS : posts
+    USERS ||--o{ JOB_INTERACTIONS : performs
+    USERS ||--o{ REWARD_LOGS : receives
+    USERS ||--o{ ROADMAP_BANDIT_DECISIONS : gets
+
+    JOBS ||--o{ ROADMAPS : basis_for
+    ROADMAPS ||--o{ JOB_INTERACTIONS : tracked_by
+    JOBS ||--o{ JOB_INTERACTIONS : optional_scope
+    JOBS ||--o{ ROADMAP_BANDIT_DECISIONS : optional_scope
+    ROADMAPS ||--o{ ROADMAP_BANDIT_DECISIONS : optional_scope

@@ -11,15 +11,24 @@ from app import models, schemas, auth, database, ml_service, gemini_service
 from app.database import engine, get_db
 from app.job_routes import router as job_router
 from app.phase2_routes import router as phase2_router
+from app.match_routes import router as match_router
 from app.job_roadmap_service import generate_job_roadmap
+from app.services.job_skills_store import analyze_and_save_job_skills, get_or_analyze_job_skills
+from app.services.model2_service import model2_service
+from app.services.roadmap.roadmap_store import get_roadmap_for_job, upsert_job_roadmap
+from app.utils.db_migrate import ensure_job_analysis_columns
+from app.utils.job_serialize import job_to_response
+from app.utils.user_profile_builder import build_doc2vec_profile_text, build_model2_user_profile
 
 models.Base.metadata.create_all(bind=engine)
+ensure_job_analysis_columns()
 
 app = FastAPI(title="PathFinder AI API")
 
 # Include enhanced job routes
 app.include_router(job_router)
 app.include_router(phase2_router)
+app.include_router(match_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -163,11 +172,13 @@ async def upload_resume(file: UploadFile = File(...), current_user: models.User 
         }
     }
     
-    # Include error message if skill extraction failed
-    if skills_data.get('error'):
-        response["extraction_error"] = skills_data['error']
+    if skills_data.get("warning"):
+        response["extraction_warning"] = skills_data["warning"]
+        response["message"] = "Resume uploaded. Skills extracted locally (Gemini quota unavailable)."
+    elif skills_data.get("error"):
+        response["extraction_error"] = skills_data["error"]
         response["message"] = "Resume uploaded, but skill extraction had issues"
-    
+
     return response
 
 
@@ -216,6 +227,11 @@ def update_job(job_id: int, job: schemas.JobUpdateEnhanced, current_recruiter: m
     
     db.commit()
     db.refresh(db_job)
+    if "jd_text" in update_data or "job_title" in update_data:
+        try:
+            analyze_and_save_job_skills(db, db_job, force=True)
+        except Exception as e:
+            print(f"Warning: Model 1 JD re-analysis on update failed: {e}")
     return db_job
 
 
@@ -283,6 +299,10 @@ def create_job_enhanced(
     db.add(db_job)
     db.commit()
     db.refresh(db_job)
+    try:
+        analyze_and_save_job_skills(db, db_job)
+    except Exception as e:
+        print(f"Warning: Model 1 JD analysis on create failed: {e}")
     return db_job
 
 
@@ -393,24 +413,10 @@ def search_jobs(
     # Pagination
     jobs = query.offset(skip).limit(limit).all()
     
-    # Ensure old jobs have required fields populated for display
-    for job in jobs:
-        if not job.job_title and job.title:
-            job.job_title = job.title
-        if not job.jd_text and job.description:
-            job.jd_text = job.description
-        if not job.company_name:
-            job.company_name = "Company Not Specified"
-        # Set defaults for new fields if missing
-        if not job.work_type:
-            job.work_type = "onsite"
-        if not job.job_type:
-            job.job_type = "full_time"
-        if job.experience_level is None:
-            job.experience_level = "fresher"
-    
+    jobs_out = [job_to_response(job) for job in jobs]
+
     return {
-        "jobs": jobs,
+        "jobs": jobs_out,
         "total": total,
         "skip": skip,
         "limit": limit,
@@ -488,93 +494,6 @@ def generate_job_roadmap_endpoint(
     }
 
 
-@app.post("/api/jobs/{job_id}/generate-roadmap-for-user")
-def generate_job_roadmap_for_user(
-    job_id: int,
-    current_user: models.User = Depends(auth.get_current_user),
-    db: Session = Depends(get_db)
-):
-    """Generate personalized AI roadmap for a specific job and user"""
-    job = db.query(models.Job).filter(models.Job.id == job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-    
-    # Get user profile
-    profile = db.query(models.UserProfile).filter(models.UserProfile.user_id == current_user.id).first()
-    if not profile:
-        raise HTTPException(status_code=404, detail="User profile not found. Please complete your profile first.")
-    
-    # Prepare user profile data
-    all_skills = (profile.skills or []) + (profile.extracted_skills or [])
-    # Separate technical and soft skills (basic heuristic)
-    technical_keywords = ['python', 'java', 'react', 'node', 'sql', 'aws', 'docker', 'javascript', 'html', 'css', 'api', 'database', 'cloud', 'ml', 'ai', 'typescript', 'angular', 'vue', 'mongodb', 'postgres', 'redis', 'kubernetes', 'git', 'linux', 'tensorflow', 'pytorch']
-    technical_skills = [s for s in all_skills if any(tech in s.lower() for tech in technical_keywords)]
-    soft_skills = [s for s in all_skills if s not in technical_skills]
-    
-    # Collect semester CGPA values
-    semester_cgpas = []
-    for sem in range(1, 9):
-        cgpa_value = getattr(profile, f'cgpa_sem{sem}', None)
-        if cgpa_value:
-            semester_cgpas.append(f"Semester {sem}: {cgpa_value}")
-    
-    user_profile = {
-        "name": current_user.full_name,
-        "degree": profile.degree or "N/A",
-        "course": profile.course or "N/A",
-        "cgpa_10th": profile.cgpa_10th,
-        "cgpa_12th": profile.cgpa_12th,
-        "total_cgpa": profile.total_cgpa,
-        "semester_cgpas": semester_cgpas,
-        "cgpa_sem1": profile.cgpa_sem1,
-        "cgpa_sem2": profile.cgpa_sem2,
-        "cgpa_sem3": profile.cgpa_sem3,
-        "cgpa_sem4": profile.cgpa_sem4,
-        "cgpa_sem5": profile.cgpa_sem5,
-        "cgpa_sem6": profile.cgpa_sem6,
-        "cgpa_sem7": profile.cgpa_sem7,
-        "cgpa_sem8": profile.cgpa_sem8,
-        "experience_years": 0,  # Could be calculated from profile if available
-        "current_role": "Student",
-        "technical_skills": technical_skills,
-        "soft_skills": soft_skills,
-        "certifications": profile.certifications or [],
-        "achievements": profile.achievements or [],
-        "target_career": job.job_title or job.title or "Software Engineer"
-    }
-    
-    # Convert job to dict format
-    job_dict = {
-        "id": job.id,
-        "job_title": job.job_title or job.title,
-        "company_name": job.company_name,
-        "jd_text": job.jd_text or job.description or "",
-        "location_city": job.location_city,
-        "location_country": job.location_country,
-        "work_type": job.work_type,
-        "job_type": job.job_type,
-        "experience_level": job.experience_level,
-        "min_experience_years": job.min_experience_years,
-        "max_experience_years": job.max_experience_years,
-        "skills_required": job.skills_required if isinstance(job.skills_required, list) else [],
-        "nice_to_have_skills": job.nice_to_have_skills if isinstance(job.nice_to_have_skills, list) else [],
-        "industry": job.industry,
-    }
-    
-    # Generate roadmap
-    result = generate_job_roadmap(job_dict, user_profile)
-    
-    if result.get("error"):
-        raise HTTPException(status_code=503, detail=result["error"])
-    
-    return {
-        "job_id": job_id,
-        "job_title": job.job_title or job.title,
-        "roadmap": result.get("roadmap"),
-        "message": "Personalized roadmap generated successfully"
-    }
-
-
 @app.post("/api/ai/recommend-careers")
 def recommend_careers(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     profile = db.query(models.UserProfile).filter(models.UserProfile.user_id == current_user.id).first()
@@ -594,99 +513,112 @@ def recommend_careers(current_user: models.User = Depends(auth.get_current_user)
     return {"careers": recommendations}
 
 
+def _rank_jobs_model2(db: Session, profile: models.UserProfile, jobs: list, top_k: int = 20) -> list[dict]:
+    user_m2 = build_model2_user_profile(profile)
+    if not user_m2.get("skills"):
+        return []
+
+    ranked: list[dict] = []
+    for job in jobs:
+        title = job.job_title or job.title or "Untitled Job"
+        jd_text = job.jd_text or job.description or ""
+        try:
+            analyzed = analyze_and_save_job_skills(db, job)
+        except Exception as e:
+            print(f"Warning: JD analysis for job {job.id}: {e}")
+            analyzed = None
+
+        pred = model2_service.match_user_job(
+            user_m2,
+            {
+                "title": title,
+                "jd_text": jd_text,
+                "required_experience": job.min_experience_years or 0,
+                "job_id": job.id,
+            },
+            analyzed_skills=analyzed,
+        )
+        jd_preview = (jd_text[:200] + "...") if len(jd_text) > 200 else jd_text
+        ranked.append(
+            {
+                "job_id": job.id,
+                "job_title": title,
+                "title": title,
+                "company_name": job.company_name or "Company Not Specified",
+                "description": jd_preview,
+                "jd_text": jd_text,
+                "location_city": job.location_city,
+                "location_country": job.location_country,
+                "location": f"{job.location_city or ''}, {job.location_country or ''}".strip(", ") or None,
+                "is_remote": job.is_remote or False,
+                "industry": job.industry,
+                "experience_level": job.experience_level,
+                "skills_required": job.skills_required if isinstance(job.skills_required, list) else [],
+                "nice_to_have_skills": job.nice_to_have_skills if isinstance(job.nice_to_have_skills, list) else [],
+                "match_score": pred["similarity_score"],
+                "similarity_score": pred["similarity_score"] / 100.0,
+                "skill_match_percentage": pred.get("skill_match_percentage", 0),
+                "matching_skills": pred.get("matched_skills", []),
+                "missing_skills": pred.get("missing_skills", []),
+                "critical_missing_skills": pred.get("critical_missing_skills", []),
+                "experience_score": pred.get("experience_score"),
+            }
+        )
+
+    ranked.sort(key=lambda r: r["match_score"], reverse=True)
+    return ranked[:top_k]
+
+
 @app.post("/api/ai/match-jobs")
 def match_jobs(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    """Match jobs from database using user profile and resume"""
+    """Rank jobs by Model 2 weighted skill similarity; fallback to Doc2Vec if needed."""
     profile = db.query(models.UserProfile).filter(models.UserProfile.user_id == current_user.id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found. Please complete your profile first.")
-    
-    # Get all active jobs from database
-    jobs_from_db = db.query(models.Job).filter(
-        models.Job.status.in_(["active", "open"])
-    ).all()
-    
+
+    jobs_from_db = (
+        db.query(models.Job)
+        .filter(models.Job.status.in_(["active", "open"]))
+        .order_by(models.Job.created_at.desc())
+        .limit(100)
+        .all()
+    )
+
     if not jobs_from_db:
         return {"jobs": [], "message": "No jobs available in the database"}
-    
-    # Build user profile text
-    user_profile_parts = []
-    
-    if profile.degree:
-        user_profile_parts.append(f"Degree: {profile.degree}")
-    if profile.course:
-        user_profile_parts.append(f"Course: {profile.course}")
-    if profile.cgpa_10th:
-        user_profile_parts.append(f"10th CGPA: {profile.cgpa_10th}")
-    if profile.cgpa_12th:
-        user_profile_parts.append(f"12th CGPA: {profile.cgpa_12th}")
-    if profile.total_cgpa:
-        user_profile_parts.append(f"Total CGPA: {profile.total_cgpa}")
-    
-    # Add semester CGPA values
-    semester_cgpas = []
-    for sem in range(1, 9):
-        cgpa_value = getattr(profile, f'cgpa_sem{sem}', None)
-        if cgpa_value:
-            semester_cgpas.append(f"Sem {sem}: {cgpa_value}")
-    if semester_cgpas:
-        user_profile_parts.append(f"Semester CGPA: {', '.join(semester_cgpas)}")
-    
-    # Add skills
-    all_skills = []
-    if profile.skills:
-        all_skills.extend(profile.skills if isinstance(profile.skills, list) else [profile.skills])
-    if profile.extracted_skills:
-        all_skills.extend(profile.extracted_skills if isinstance(profile.extracted_skills, list) else [profile.extracted_skills])
-    
-    if all_skills:
-        user_profile_parts.append(f"Skills: {', '.join(all_skills)}")
-    
-    # Add certifications
-    if profile.certifications:
-        certs = profile.certifications if isinstance(profile.certifications, list) else [profile.certifications]
-        user_profile_parts.append(f"Certifications: {', '.join(certs)}")
-    
-    # Add achievements
-    if profile.achievements:
-        achievements = profile.achievements if isinstance(profile.achievements, list) else [profile.achievements]
-        user_profile_parts.append(f"Achievements: {', '.join(achievements)}")
-    
-    # Extract resume text if available
-    resume_text = ""
-    if profile.resume_path:
-        try:
-            resume_text = gemini_service.extract_text_from_file(profile.resume_path)
-        except Exception as e:
-            print(f"Warning: Could not extract resume text: {e}")
-            resume_text = ""
-    
-    # Combine all user information
-    combined_text = " ".join(user_profile_parts)
-    if resume_text and len(resume_text.strip()) > 10:
-        combined_text += f" Resume: {resume_text[:2000]}"  # Limit resume text to avoid too long input
-    
+
+    try:
+        ranked = _rank_jobs_model2(db, profile, jobs_from_db, top_k=20)
+        if ranked:
+            return {
+                "jobs": ranked,
+                "total_matched": len(ranked),
+                "message": f"Found {len(ranked)} matching jobs (importance-weighted similarity)",
+                "matcher": "model2",
+            }
+    except Exception as e:
+        print(f"Model 2 matching failed, trying Doc2Vec fallback: {e}")
+
+    combined_text = build_doc2vec_profile_text(profile, gemini_service)
     if not combined_text or len(combined_text.strip()) < 10:
         raise HTTPException(
-            status_code=400, 
-            detail="Insufficient profile information. Please add skills, upload a resume, or complete your profile."
+            status_code=400,
+            detail="Insufficient profile information. Please add skills, upload a resume, or complete your profile.",
         )
-    
-    # Match jobs from database
+
     matched_jobs = ml_service.match_jobs_from_database(combined_text, jobs_from_db, top_k=20)
-    
     if not matched_jobs:
-        # Fallback: return jobs sorted by creation date if ML matching fails
         return {
             "jobs": [],
-            "message": "Job matching service is temporarily unavailable. Please browse jobs manually.",
-            "fallback_available": True
+            "message": "No matching jobs found. Try updating your profile or browse all jobs.",
+            "fallback_available": True,
         }
-    
+
     return {
         "jobs": matched_jobs,
         "total_matched": len(matched_jobs),
-        "message": f"Found {len(matched_jobs)} matching jobs"
+        "message": f"Found {len(matched_jobs)} matching jobs (semantic similarity)",
+        "matcher": "doc2vec",
     }
 
 
@@ -701,32 +633,51 @@ def generate_roadmap(request: schemas.RoadmapRequest, current_user: models.User 
 
 @app.post("/api/roadmaps/save", response_model=schemas.RoadmapResponse)
 def save_roadmap(request: schemas.RoadmapSaveRequest, current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
-    """Save a roadmap. Users can have maximum 3 saved roadmaps. If limit reached, oldest is deleted."""
-    # Get current roadmaps count
+    """Save a roadmap. Job roadmaps upsert by job_id (no duplicate rows). Max 3 total roadmaps."""
+    if request.job_id:
+        db_roadmap = upsert_job_roadmap(
+            db,
+            current_user.id,
+            request.job_id,
+            request.roadmap_data,
+            request.title,
+            target_career=request.target_career,
+        )
+        return db_roadmap
+
     existing_roadmaps = db.query(models.Roadmap).filter(
         models.Roadmap.user_id == current_user.id
     ).order_by(models.Roadmap.created_at.asc()).all()
-    
-    # If user has 3 or more roadmaps, delete the oldest one
+
     if len(existing_roadmaps) >= 3:
-        oldest_roadmap = existing_roadmaps[0]
-        db.delete(oldest_roadmap)
+        db.delete(existing_roadmaps[0])
         db.commit()
-    
-    # Create new roadmap
+
     db_roadmap = models.Roadmap(
         user_id=current_user.id,
         title=request.title,
         roadmap_data=request.roadmap_data,
         job_id=request.job_id,
         roadmap_type=request.roadmap_type,
-        target_career=request.target_career
+        target_career=request.target_career,
     )
     db.add(db_roadmap)
     db.commit()
     db.refresh(db_roadmap)
-    
     return db_roadmap
+
+
+@app.get("/api/roadmaps/by-job/{job_id}", response_model=schemas.RoadmapResponse)
+def get_roadmap_by_job(
+    job_id: int,
+    current_user: models.User = Depends(auth.get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Return the saved roadmap for this user and job, if any."""
+    row = get_roadmap_for_job(db, current_user.id, job_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="No saved roadmap for this job")
+    return row
 
 
 @app.get("/api/roadmaps", response_model=List[schemas.RoadmapResponse])
@@ -860,15 +811,115 @@ def regenerate_roadmap_task(
     }
 
 
-@app.post("/api/ai/chat")
-def chat(request: schemas.ChatRequest, current_user: models.User = Depends(auth.get_current_user)):
-    chat_result = gemini_service.chat_with_context(request.message, {"name": current_user.full_name})
-    
-    # Check for errors
-    if chat_result.get("error"):
-        raise HTTPException(status_code=503, detail=chat_result["error"])
-    
-    return {"response": chat_result.get("response", "")}
+@app.post("/api/ai/chat", response_model=schemas.ChatResponse)
+def chat(
+    request: schemas.ChatRequest,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    from app.services import chat_service
+
+    result = chat_service.process_chat(
+        db=db,
+        user_id=current_user.id,
+        user_name=current_user.full_name,
+        message=request.message,
+        session_id=request.session_id,
+        page_type=request.page_type,
+        page_id=request.page_id,
+        context=request.context,
+    )
+    return result
+
+
+@app.get("/api/ai/chat/sessions", response_model=List[schemas.ChatSessionSummary])
+def list_chat_sessions(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    from app.services import chat_service
+
+    sessions = chat_service.list_sessions(db, current_user.id)
+    return [
+        schemas.ChatSessionSummary(
+            id=s.id,
+            page_type=s.page_type,
+            page_id=s.page_id or "",
+            title=s.title,
+            message_count=len(s.messages or []),
+            updated_at=s.updated_at,
+        )
+        for s in sessions
+    ]
+
+
+@app.get("/api/ai/chat/sessions/{session_id}", response_model=schemas.ChatSessionDetail)
+def get_chat_session(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    from app.services import chat_service
+
+    session = chat_service.get_session(db, current_user.id, session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    msgs = session.messages or []
+    return schemas.ChatSessionDetail(
+        id=session.id,
+        page_type=session.page_type,
+        page_id=session.page_id or "",
+        title=session.title,
+        messages=[
+            schemas.ChatMessage(role=m.get("role", "assistant"), content=m.get("content", ""))
+            for m in msgs
+            if isinstance(m, dict) and m.get("content")
+        ],
+        created_at=session.created_at,
+        updated_at=session.updated_at,
+    )
+
+
+@app.get("/api/ai/chat/sessions/by-page", response_model=schemas.ChatSessionDetail)
+def get_chat_session_by_page(
+    page_type: str = Query("global"),
+    page_id: str = Query(""),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    from app.services import chat_service
+
+    session = chat_service.get_or_create_session(
+        db, current_user.id, page_type, page_id
+    )
+    msgs = session.messages or []
+    return schemas.ChatSessionDetail(
+        id=session.id,
+        page_type=session.page_type,
+        page_id=session.page_id or "",
+        title=session.title,
+        messages=[
+            schemas.ChatMessage(role=m.get("role", "assistant"), content=m.get("content", ""))
+            for m in msgs
+            if isinstance(m, dict) and m.get("content")
+        ],
+        created_at=session.created_at,
+        updated_at=session.updated_at,
+    )
+
+
+@app.delete("/api/ai/chat/sessions/{session_id}")
+def clear_chat_session(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    from app.services import chat_service
+
+    session = chat_service.clear_session_messages(db, current_user.id, session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    return {"message": "Chat cleared", "session_id": session.id}
 
 
 @app.get("/")

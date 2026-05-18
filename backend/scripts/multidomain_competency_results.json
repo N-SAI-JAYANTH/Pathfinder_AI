@@ -1,0 +1,222 @@
+{
+  "software_role": {
+    "all": [
+      {
+        "competency": "sql",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.998,
+        "weight": 2.0
+      },
+      {
+        "competency": "fastapi",
+        "competency_type": "domain_knowledge",
+        "importance_label": "important",
+        "importance_score": 0.9978,
+        "weight": 2.0
+      },
+      {
+        "competency": "docker",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.9969,
+        "weight": 2.0
+      },
+      {
+        "competency": "python",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.9966,
+        "weight": 2.0
+      },
+      {
+        "competency": "must have api design",
+        "competency_type": "technical_skill",
+        "importance_label": "supporting",
+        "importance_score": 0.9998,
+        "weight": 1.0
+      },
+      {
+        "competency": "redis",
+        "competency_type": "domain_knowledge",
+        "importance_label": "supporting",
+        "importance_score": 0.9985,
+        "weight": 1.0
+      },
+      {
+        "competency": "kubernetes",
+        "competency_type": "technical_skill",
+        "importance_label": "supporting",
+        "importance_score": 0.9981,
+        "weight": 1.0
+      }
+    ],
+    "critical": [
+      {
+        "competency": "sql",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.998
+      },
+      {
+        "competency": "fastapi",
+        "competency_type": "domain_knowledge",
+        "importance_label": "important",
+        "importance_score": 0.9978
+      },
+      {
+        "competency": "docker",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.9969
+      },
+      {
+        "competency": "python",
+        "competency_type": "technical_skill",
+        "importance_label": "important",
+        "importance_score": 0.9966
+      }
+    ]
+  },
+  "hr_operations_role": {
+    "all": [
+      {
+        "competency": "staff augmentation",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9997,
+        "weight": 1.0
+      },
+      {
+        "competency": "vendor management",
+        "competency_type": "leadership_or_stakeholder",
+        "importance_label": "supporting",
+        "importance_score": 0.9997,
+        "weight": 1.0
+      },
+      {
+        "competency": "workforce strategy",
+        "competency_type": "domain_knowledge",
+        "importance_label": "supporting",
+        "importance_score": 0.9997,
+        "weight": 1.0
+      },
+      {
+        "competency": "stakeholder management",
+        "competency_type": "leadership_or_stakeholder",
+        "importance_label": "supporting",
+        "importance_score": 0.9993,
+        "weight": 1.0
+      },
+      {
+        "competency": "onboarding compliance",
+        "competency_type": "compliance_or_standard",
+        "importance_label": "supporting",
+        "importance_score": 0.9992,
+        "weight": 1.0
+      },
+      {
+        "competency": "hris",
+        "competency_type": "tool_or_platform",
+        "importance_label": "supporting",
+        "importance_score": 0.9991,
+        "weight": 1.0
+      },
+      {
+        "competency": "ats",
+        "competency_type": "tool_or_platform",
+        "importance_label": "optional",
+        "importance_score": 0.995,
+        "weight": 0.5
+      },
+      {
+        "competency": "reporting",
+        "competency_type": "domain_knowledge",
+        "importance_label": "optional",
+        "importance_score": 0.9944,
+        "weight": 0.5
+      }
+    ],
+    "critical": []
+  },
+  "civil_role": {
+    "all": [
+      {
+        "competency": "site supervision",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9999,
+        "weight": 1.0
+      },
+      {
+        "competency": "boq preparation",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9998,
+        "weight": 1.0
+      },
+      {
+        "competency": "project estimation",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9998,
+        "weight": 1.0
+      },
+      {
+        "competency": "structural analysis and safety compliance",
+        "competency_type": "compliance_or_standard",
+        "importance_label": "supporting",
+        "importance_score": 0.9994,
+        "weight": 1.0
+      }
+    ],
+    "critical": []
+  },
+  "management_program_role": {
+    "all": [
+      {
+        "competency": "need procurement planning",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9998,
+        "weight": 1.0
+      },
+      {
+        "competency": "sla management",
+        "competency_type": "compliance_or_standard",
+        "importance_label": "supporting",
+        "importance_score": 0.9998,
+        "weight": 1.0
+      },
+      {
+        "competency": "logistics coordination",
+        "competency_type": "domain_knowledge",
+        "importance_label": "supporting",
+        "importance_score": 0.9997,
+        "weight": 1.0
+      },
+      {
+        "competency": "inventory control",
+        "competency_type": "workflow_or_process",
+        "importance_label": "supporting",
+        "importance_score": 0.9992,
+        "weight": 1.0
+      },
+      {
+        "competency": "risk mitigation",
+        "competency_type": "compliance_or_standard",
+        "importance_label": "supporting",
+        "importance_score": 0.7973,
+        "weight": 1.0
+      },
+      {
+        "competency": "cross-functional leadership",
+        "competency_type": "leadership_or_stakeholder",
+        "importance_label": "optional",
+        "importance_score": 0.9082,
+        "weight": 0.5
+      }
+    ],
+    "critical": []
+  }
+}

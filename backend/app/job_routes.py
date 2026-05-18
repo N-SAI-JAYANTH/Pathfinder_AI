@@ -8,6 +8,9 @@ from datetime import datetime, timedelta
 from app import models, schemas, auth
 from app.database import get_db
 from app.job_roadmap_service import generate_job_roadmap
+from app.services.job_skills_store import analyze_and_save_job_skills
+from app.services.roadmap.roadmap_store import upsert_job_roadmap
+from app.utils.job_serialize import job_to_response
 
 router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
@@ -56,6 +59,10 @@ def create_job_enhanced(
     db.add(db_job)
     db.commit()
     db.refresh(db_job)
+    try:
+        analyze_and_save_job_skills(db, db_job)
+    except Exception as e:
+        print(f"Warning: Model 1 JD analysis on create failed: {e}")
     return db_job
 
 
@@ -151,19 +158,8 @@ def search_jobs(
     total = query.count()
     jobs = query.offset(skip).limit(limit).all()
     
-    # Convert to response format - handle both old and new job formats
-    jobs_list = []
-    for job in jobs:
-        # Ensure we have job_title (use title as fallback for old jobs)
-        if not job.job_title and job.title:
-            job.job_title = job.title
-        if not job.jd_text and job.description:
-            job.jd_text = job.description
-        if not job.company_name:
-            job.company_name = "Company Not Specified"
-        
-        jobs_list.append(job)
-    
+    jobs_list = [job_to_response(job) for job in jobs]
+
     return {
         "jobs": jobs_list,
         "total": total,
@@ -320,36 +316,24 @@ def generate_job_roadmap_for_user(
     
     if result.get("error"):
         raise HTTPException(status_code=503, detail=result["error"])
-    
-    # Save roadmap to database
-    # Check current roadmaps count and enforce limit of 3
-    existing_roadmaps = db.query(models.Roadmap).filter(
-        models.Roadmap.user_id == current_user.id
-    ).order_by(models.Roadmap.created_at.asc()).all()
-    
-    # If user has 3 or more roadmaps, delete the oldest one
-    if len(existing_roadmaps) >= 3:
-        oldest_roadmap = existing_roadmaps[0]
-        db.delete(oldest_roadmap)
-        db.commit()
 
-    db_roadmap = models.Roadmap(
-        user_id=current_user.id,
-        title=f"Roadmap: {job.job_title or job.title}",
-        roadmap_data=result.get("roadmap"),
-        job_id=job.id,
-        roadmap_type="job",
-        target_career=job.job_title or job.title
+    roadmap_payload = result.get("roadmap")
+    title = f"Roadmap: {job.job_title or job.title}"
+    db_roadmap = upsert_job_roadmap(
+        db,
+        current_user.id,
+        job.id,
+        roadmap_payload,
+        title,
+        target_career=job.job_title or job.title,
     )
-    db.add(db_roadmap)
-    db.commit()
-    db.refresh(db_roadmap)
-    
+
     return {
         "job_id": job_id,
         "job_title": job.job_title or job.title,
-        "roadmap": result.get("roadmap"),
+        "roadmap": roadmap_payload,
         "roadmap_id": db_roadmap.id,
-        "message": "Personalized roadmap generated and saved successfully"
+        "saved": True,
+        "message": "Personalized roadmap generated and saved successfully",
     }
 

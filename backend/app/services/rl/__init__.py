@@ -1,6 +1,6 @@
 """
-RL service: contextual bandit for roadmap recommendations.
+RL service: constrained contextual bandit for roadmap recommendations.
 """
-from app.services.rl.bandit import rl_service, RLService
+from app.services.rl.bandit import ACTIONS, get_valid_actions, rl_service, RLService
 
-__all__ = ["rl_service", "RLService"]
+__all__ = ["rl_service", "RLService", "get_valid_actions", "ACTIONS"]
