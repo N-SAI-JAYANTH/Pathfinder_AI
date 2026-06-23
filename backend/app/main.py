@@ -853,17 +853,18 @@ def list_chat_sessions(
     ]
 
 
-@app.get("/api/ai/chat/sessions/{session_id}", response_model=schemas.ChatSessionDetail)
-def get_chat_session(
-    session_id: int,
+@app.get("/api/ai/chat/sessions/by-page", response_model=schemas.ChatSessionDetail)
+def get_chat_session_by_page(
+    page_type: str = Query("global"),
+    page_id: str = Query(""),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user),
 ):
     from app.services import chat_service
 
-    session = chat_service.get_session(db, current_user.id, session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail="Chat session not found")
+    session = chat_service.get_or_create_session(
+        db, current_user.id, page_type, page_id
+    )
     msgs = session.messages or []
     return schemas.ChatSessionDetail(
         id=session.id,
@@ -880,18 +881,17 @@ def get_chat_session(
     )
 
 
-@app.get("/api/ai/chat/sessions/by-page", response_model=schemas.ChatSessionDetail)
-def get_chat_session_by_page(
-    page_type: str = Query("global"),
-    page_id: str = Query(""),
+@app.get("/api/ai/chat/sessions/{session_id}", response_model=schemas.ChatSessionDetail)
+def get_chat_session(
+    session_id: int,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(auth.get_current_user),
 ):
     from app.services import chat_service
 
-    session = chat_service.get_or_create_session(
-        db, current_user.id, page_type, page_id
-    )
+    session = chat_service.get_session(db, current_user.id, session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
     msgs = session.messages or []
     return schemas.ChatSessionDetail(
         id=session.id,

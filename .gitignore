@@ -83,3 +83,16 @@ htmlcov/
 *.temp
 .cache/
 
+# Reports, presentations, backups
+*.pptx
+*.pptx.backup
+PROJECT_FINAL_REPORT.md
+RL_EXPLAINED.md
+SYSTEM_DESIGN_EXPLAINED.md
+PROJECT_STRUCTURE.md
+docs/
+*.orig
+backend/scripts/audit_report.json
+backend/scripts/*_results.json
+backend/scripts/e2e_adaptive_demo_snippets.json
+
